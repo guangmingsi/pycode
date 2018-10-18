@@ -1,0 +1,27 @@
+import select
+from socket import *
+def main():
+
+	service_sokcet = socket(AF_INET,SOCKET_STREAM)
+	service_sokcet.bind("",4545)
+	service_sokcet.listen(5)
+	#将tcp服务器socket加入到列表中
+	socket_list=[service_sokcet]
+	while True:
+		#select函数回将有接收的socket返回一个列表rdable
+		rdable_socket,wrable_socket,except_socket = select.select(socket_list,[],[])
+		#遍历rdable
+		for socket in rdable_socket:
+			#如果有新的请求，创建新的客户端socket，并加入到列表中
+			if socket == service_sokcet:
+				client_socket,client_addr = service_sokcet.accept()
+				socket_list.append(client_socket)
+			#如果不是服务端套接字，是客户端的套接字，则进行打印收到内容
+			else
+				recvdata = socket.recv(1024)
+				if recvdata:
+					print(recvdata)
+				#如果内容为空就删掉列表中这个socket，并关闭这个socket
+				else:
+					socket_list.remove(socket)
+					socket.close()

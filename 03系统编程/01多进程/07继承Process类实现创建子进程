@@ -1,0 +1,17 @@
+from multiprocessing import Process
+import time
+class Process_son(Process):
+	"""docstring for Process_son"""
+	def __init__(self):
+		super(Process_son, self).__init__()
+		
+	def run(self):
+		for i in range(10):
+			print("子进程开始")
+			time.sleep(1)
+
+p = Process_son()
+p.start()#Process子类对象调用start（）方法会自动调用重写的run方法，
+#即直接让子进程运行run方法
+p.join()
+print("子进程，父进程执行结束")		
